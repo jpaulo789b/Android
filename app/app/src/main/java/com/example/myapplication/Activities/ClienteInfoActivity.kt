@@ -23,7 +23,7 @@ class ClienteInfoActivity : AppCompatActivity(),
 
     private var transaction = supportFragmentManager.beginTransaction()
     private var mFabricaDeFragmentos = LinkedHashMap<String, Fragment>();
-    var mServiceProvider: ServiceProvider = ServiceProvider();
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +33,9 @@ class ClienteInfoActivity : AppCompatActivity(),
         supportActionBar?.setTitle(R.string.fragment_titulo_dados)
         navigationView.setOnNavigationItemSelectedListener( this )
         navigationView.setOnNavigationItemReselectedListener( this )
-
+        mFabricaDeFragmentos[FragmentsEnum.DADOS.name] = criaInstancia(FragmentsEnum.DADOS.fragment.name)
+        transaction.replace(R.id.mainFragment,  mFabricaDeFragmentos[FragmentsEnum.DADOS.name]!! )
+        transaction.commit()
     }
 
     fun mudarParaOFragment(item: MenuItem) {
@@ -42,7 +44,7 @@ class ClienteInfoActivity : AppCompatActivity(),
             R.id.nav_histo -> FragmentsEnum.HISTORICO
             R.id.nav_alvaras -> FragmentsEnum.ALVARA
             else ->return;
-        };
+        }
         if (mFabricaDeFragmentos[fragmento.name] == null) {
             mFabricaDeFragmentos[fragmento.name] = criaInstancia(fragmento.fragment.name)
         }
@@ -52,27 +54,10 @@ class ClienteInfoActivity : AppCompatActivity(),
         transaction.addToBackStack(fragmento.name)
         transaction.commit()
 
-        loadInfoDoCliente();
-    }
-
-    private fun loadInfoDoCliente() {
-//        mServiceProvider.createService(ConfigURL.DADOSCLIENTE,AppService.class)
-        mServiceProvider.createService(ConfigURL.DADOSCLIENTE,AppService::class.java).dadosCliente.enqueue(RetornoFromService(object :
-            RemoteCallBackListener<Cliente> {
-            override fun recebeuDadosComSucesso(response: Cliente) {
-
-            }
-
-            override fun recebeuErroVindoDoServidor(erro: String) {
-
-            }
-
-            override fun recebeuErroDeComunicacao(erro: String) {
-
-            }
-        }));
 
     }
+
+
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

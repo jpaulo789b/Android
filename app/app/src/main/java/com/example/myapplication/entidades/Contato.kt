@@ -8,7 +8,7 @@ data class Contato (
     val conjuge: String,
     val tipo: String,
     val time: String,
-    val eMail: String,
-    val dataNascimento: String,
+    val e_mail: String,
+    val data_nascimento: String,
     val dataNascimentoConjuge: String
 )
